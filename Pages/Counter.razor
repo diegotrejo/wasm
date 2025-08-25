@@ -1,0 +1,38 @@
+﻿@page "/counter"
+
+@inject IJSRuntime JS
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int currentCount = 0;
+
+    private async Task IncrementCount()
+    {
+        var data = new List<DemoDto>();
+        data.Add(new DemoDto { Id = 1, Nombre = "Juan Perez", Fecha = DateTime.Now, Monto = 123.42345M });
+        data.Add(new DemoDto { Id = 2, Nombre = "Maria Gomez", Fecha = DateTime.Now.AddDays(-1), Monto = 6544278.923440M });
+        data.Add(new DemoDto { Id = 3, Nombre = "Carlos Lopez", Fecha = DateTime.Now.AddDays(-2), Monto = 234.56M });
+        data.Add(new DemoDto { Id = 4, Nombre = "Ana Torres", Fecha = DateTime.Now.AddDays(-3), Monto = 789.01M });
+        data.Add(new DemoDto { Id = 5, Nombre = "Luis Ramirez", Fecha = DateTime.Now.AddDays(-4), Monto = 345.67M });
+
+        await JS.InvokeVoidAsync("ExportExcel.fromObjects", "ESCEDEMO.XLSX", "DATOS", data);
+
+    }
+
+
+
+    class DemoDto
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; } = "";
+        public DateTime Fecha { get; set; }
+        public decimal Monto { get; set; }
+    }
+}
